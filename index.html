@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Dynamic Mind Map with jsMind</title>
+
+    <!-- Include Roboto Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Include jsMind Styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/jsmind/style/jsmind.css"
+    />
+
+    <!-- Include FontAwesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- Include Custom CSS -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="logo-container">
+      <span class="logo-m">M</span>
+      <span class="logo-text">indlyMap</span>
+    </div>
+
+    <!-- Mind Map Container -->
+    <div id="jsmind_container" class="mindmap-container"></div>
+
+    <!-- Color Selection Popup -->
+    <div id="color-popup" class="color-popup" style="display: none"></div>
+
+    <!-- Exit Focus Mode Button (Hidden by Default) -->
+    <button
+      id="exit-focus-button"
+      class="exit-focus-button"
+      title="Exit Focus Mode"
+      onclick="exitFocusMode()"
+      style="display: none"
+    >
+      <i class="fas fa-compress"></i>
+      <!-- Close Icon -->
+    </button>
+
+    <!-- Add Image to Node Button (Hidden by Default) -->
+    <button
+      id="add-image-button"
+      onclick="triggerNodeImageInput()"
+      title="Add Image to Selected Node"
+      style="display: none"
+    >
+      <i class="fas fa-image"></i>
+      <!-- Image Icon -->
+    </button>
+
+    <!-- Color Picker for Individual Nodes -->
+    <input
+      type="color"
+      id="color-picker"
+      onchange="changeNodeColor()"
+      style="display: none"
+    />
+
+    <!-- File Input to Import Mind Map (Hidden) -->
+    <input
+      type="file"
+      id="file-input"
+      accept=".json"
+      onchange="loadMindMap(event)"
+      style="display: none"
+    />
+
+    <!-- File Input to Select Image for a Node (Hidden) -->
+    <input
+      type="file"
+      id="node-image-input"
+      accept="image/*"
+      onchange="addNodeImage(event)"
+      style="display: none"
+    />
+
+    <!-- Mind Map Toolbar -->
+    <div class="mindmap-toolbar">
+      <button onclick="zoomIn()" title="Zoom In" aria-label="Zoom In">
+        <i class="fas fa-search-plus"></i>
+        <!-- Zoom In Icon -->
+      </button>
+      <button
+        onclick="zoomOut()"
+        title="Zoom Out"
+        aria-label="Zoom Out"
+      >
+        <i class="fas fa-search-minus"></i>
+        <!-- Zoom Out Icon -->
+      </button>
+      <button
+        onclick="toggleFocusMode()"
+        title="Focus Mode"
+        aria-label="Activate Focus Mode"
+        class="toggle-focus"
+      >
+        <i class="fas fa-expand"></i>
+        <!-- Initial Expansion Icon -->
+      </button>
+      <button onclick="undo()" title="Undo (Ctrl+Z)" aria-label="Undo (Ctrl+Z)">
+        <i class="fa fa-undo"></i>
+      </button>
+      <button onclick="exportMindMap()" title="Export as Image" aria-label="Export as Image">
+        <i class="fas fa-file-image"></i> <!-- Export Image Icon -->
+      </button>
+      <!-- Button to Change Orientation -->
+      <!-- Button to Open Instructions -->
+      <button onclick="openInstructionsPopup(true)" title="Show Instructions" aria-label="Show Instructions">
+        <i class="fas fa-info-circle"></i>
+        <!-- Information Icon -->
+      </button>
+    </div>
+
+    <!-- Controls Section -->
+    <div class="controls">
+      <!-- Markdown Input Section -->
+      <div class="control-section markdown-section">
+        <textarea
+          id="markdown-input"
+          placeholder="Enter your Markdown here..."
+        >
+# Mind Map Root
+- Branch 1
+  - Leaf 1.1
+  - Leaf 1.2
+- Branch 2
+  - Leaf 2.1
+  - Leaf 2.2
+        </textarea>
+      </div>
+
+      <!-- Action Buttons Section -->
+      <div class="control-section buttons-section">
+        <button
+          onclick="renderMindMap()"
+          title="Generate"
+          aria-label="Generate"
+        >
+          <i class="fas fa-sync-alt"></i> Generate
+        </button>
+        <button
+          onclick="triggerFileInput()"
+          title="Import"
+          aria-label="Import"
+        >
+          <i class="fas fa-upload"></i> Import
+        </button>
+      </div>
+
+      <!-- Color Selectors Section -->
+      <div class="control-section colors-section">
+        <h3>Select Colors by Level</h3>
+        <div id="level-colors-container" class="level-colors-container"></div>
+      </div>
+    </div>
+
+    <!-- Instructions Popup -->
+    <div id="instructions-popup" class="instructions-popup" role="dialog" aria-modal="true" aria-labelledby="instructions-title">
+      <div class="popup-content">
+        <span class="close-button" onclick="closeInstructionsPopup()" aria-label="Close">&times;</span>
+        <h2 id="instructions-title">Format Instructions</h2>
+        <p>To generate your mind map, please follow the Markdown format below:</p>
+        <pre>
+# Mind Map Root
+- Branch 1
+  - Leaf 1.1
+  - Leaf 1.2
+- Branch 2
+  - Leaf 2.1
+  - Leaf 2.2
+        </pre>
+        <p>Each branch is preceded by a dash (-) and sub-branches are indented with two spaces.</p>
+        <div class="dont-show-again">
+          <input type="checkbox" id="dont-show-again" onclick="dontShowAgain()" />
+          <label for="dont-show-again">Do not show again</label>
+        </div>
+        <button onclick="closeInstructionsPopup()" class="close-popup-button">Close</button>
+      </div>
+    </div>
+
+    <!-- Toggle Controls Button (Fixed at Bottom Right) -->
+    <button class="toggle-controls" aria-label="Show/Hide Controls">
+      <i class="fas fa-eye-slash"></i>
+      <!-- Initial Icon to Hide Controls -->
+    </button>
+
+    <!-- Include jsMind Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jsmind/js/jsmind.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsmind/js/jsmind.draggable.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsmind/js/jsmind.screenshot.js"></script>
+
+    <!-- Include Custom JavaScript -->
+    <script src="script.js"></script>
+  </body>
+</html>

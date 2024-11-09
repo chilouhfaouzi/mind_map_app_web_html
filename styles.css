@@ -1,0 +1,886 @@
+/* ====================================================
+    1. Définition des Couleurs Personnalisées
+==================================================== */
+:root {
+  /* Couleurs de Base */
+  --color-root-node: #27374d;
+  --color-level-0: #72ca68; /* Vert */
+  --color-level-1: #e74c3c; /* Rouge */
+  --color-level-2: #3498db; /* Bleu */
+  --color-level-3: #f1c40f; /* Jaune */
+  --color-level-4: #9b59b6; /* Violet */
+
+  /* Couleurs pour les Boutons */
+  --color-button-background: rgba(0, 0, 0, 0.6);
+  --color-button-hover: rgba(0, 0, 0, 0.8);
+
+  /* Couleurs Spécifiques */
+  --color-red-6: #fc9c97;
+  --color-primary-10-light: #27374d;
+  --color-blue-10: #3498db;
+}
+
+/* ====================================================
+    2. Styles Généraux
+==================================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #f2fcff, #c8edf9);
+  margin: 0;
+  padding: 10px 15px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 16px;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Conteneur global du logo */
+.logo-container {
+  display: flex;
+  align-items: center;
+  color: #3d566e;
+  font-family: 'Roboto', sans-serif;
+  padding: 4px 0;
+}
+
+.logo-m {
+  font-size: 2.2em;
+  font-weight: bold;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* ====================================================
+    3. Conteneur de la Carte Mentale
+==================================================== */
+.mindmap-container {
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid #b0bec5; /* Bordure plus douce */
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ffffff, #e0f7fa); /* Dégradé doux */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: auto; /* Permet le défilement si la carte dépasse la hauteur */
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+/* ====================================================
+    4. Barre d'Outils de la Carte Mentale
+==================================================== */
+.mindmap-toolbar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.mindmap-toolbar button {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border: none;
+  padding: 10px; /* Augmenté pour les mobiles */
+  border-radius: 50%;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.mindmap-toolbar button:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* ====================================================
+    5. Section des Contrôles - Améliorée
+==================================================== */
+.control-section {
+  margin-bottom: 20px;
+}
+
+.container {
+  padding: 10px 15px;
+}
+
+.markdown-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--color-root-node);
+}
+
+.markdown-section textarea {
+  width: 100%;
+  max-width: 100%;
+  min-height: 150px;
+  max-height: 300px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 16px;
+  resize: vertical;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.markdown-section textarea:focus {
+  border-color: var(--color-blue-10);
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+.buttons-section {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.buttons-section button {
+  background-color: var(--color-button-background);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 44px;
+  height: 44px;
+}
+
+.buttons-section button:hover {
+  background-color: var(--color-button-hover);
+  transform: translateY(-2px);
+}
+
+.buttons-section button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
+}
+
+.colors-section h3 {
+  margin-bottom: 10px;
+  color: var(--color-root-node);
+  text-align: center;
+}
+
+.level-colors-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.level-color-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.level-color-selector label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.level-color-selector .default-color {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #000;
+  transition: transform 0.2s ease;
+}
+
+.level-color-selector .default-color:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Design pour les Contrôles */
+@media screen and (max-width: 768px) {
+  /* Ajustements des sous-sections */
+  .buttons-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .buttons-section button {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+  }
+
+  .level-color-selector .default-color {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* ====================================================
+    6. Styliser le Bouton de Toggle des Contrôles
+==================================================== */
+.toggle-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-button-background);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  font-size: 1em;
+  z-index: 1002;
+  min-width: 44px;
+  height: 44px;
+}
+
+.toggle-controls:hover {
+  background-color: var(--color-button-hover);
+  transform: scale(1.05);
+}
+
+.controls.collapsed .toggle-controls {
+  background-color: var(--color-red-6);
+}
+
+.controls.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 20px;
+  margin: 0;
+  visibility: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.controls.collapsed textarea,
+.controls.collapsed .button-group,
+.controls.collapsed #level-colors-container {
+  display: none;
+}
+
+/* ====================================================
+    7. Zone de Saisie Markdown (Textarea)
+==================================================== */
+#markdown-input {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100px;
+  max-height: 400px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 15px 20px;
+  font-size: 16px;
+  resize: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, height 0.2s ease;
+}
+
+#markdown-input:focus {
+  border-color: var(--color-blue-10);
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+/* ====================================================
+    8. Groupe de Boutons
+==================================================== */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.button-group button {
+  background-color: var(--color-button-background);
+  color: #fff;
+  border: none;
+  padding: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+}
+
+.button-group button:hover {
+  transform: translateY(-3px);
+  background-color: var(--color-button-hover);
+}
+
+.button-group button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
+}
+
+/* ====================================================
+    9. Sélecteurs de Couleurs des Niveaux
+==================================================== */
+.level-colors-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.level-color-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.level-color-selector label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.level-color-selector .default-color {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #000;
+}
+
+/* Option Spécifique pour la Racine */
+.level-color-selector.root-selector label {
+  font-weight: bold;
+}
+
+/* ====================================================
+    10. Popup de Sélection de Couleurs
+==================================================== */
+.color-popup {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 10;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  width: 200px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.color-popup .color-option {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.color-popup .color-option.selected {
+  border-color: #000;
+}
+
+/* ====================================================
+    11. Nœuds de la Carte Mentale
+==================================================== */
+.jmnodes .jmnode {
+  border-radius: 20px;
+  padding: 10px 15px;
+  color: #fff;
+  font-weight: bold;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.jmnodes .jmnode:hover {
+  transform: scale(1.05);
+}
+
+.jmnodes .jmnode.selected {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles Spécifiques des Nœuds par Niveau */
+.jmnodes .root {
+  background: var(--color-root-node);
+}
+
+.jmnodes .level-0 {
+  background: var(--color-level-0);
+}
+
+.jmnodes .level-1 {
+  background: var(--color-level-1);
+}
+
+.jmnodes .level-2,
+.jmnodes .level-3,
+.jmnodes .level-4 {
+  background: var(--color-level-2);
+}
+
+/* ====================================================
+    12. Boutons Additionnels
+==================================================== */
+/* Bouton pour Quitter le Mode Focus */
+.exit-focus-button {
+  position: fixed;
+  top: 15px;
+  right: 16px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50%;
+  font-size: 1em;
+  cursor: pointer;
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+  min-width: 44px;
+  height: 44px;
+}
+
+.exit-focus-button:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* Bouton pour Ajouter une Image aux Nœuds */
+#add-image-button {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  transition: background-color 0.3s ease;
+  min-width: 44px;
+  height: 44px;
+}
+
+#add-image-button:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+/* Sélecteur de Couleur pour les Nœuds */
+#color-picker {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1001;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+#color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+#color-picker:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
+}
+
+/* ====================================================
+    13. Responsive Design Amélioré
+==================================================== */
+@media screen and (max-width: 768px) {
+  /* Conteneurs */
+  .controls {
+    width: 95%;
+    margin: 20px auto;
+    padding: 10px;
+  }
+
+  .mindmap-container {
+    height: calc(100vh - 200px);
+  }
+
+  /* Zone de Saisie Markdown */
+  #markdown-input {
+    font-size: 14px;
+    min-height: 60px;
+    max-height: 200px;
+    padding: 10px 15px;
+  }
+
+  /* Boutons de Contrôle */
+  .button-group button {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+
+  /* Sélecteurs de Couleurs des Niveaux */
+  .level-color-selector label {
+    font-size: 16px;
+  }
+
+  .color-popup {
+    width: 90%;
+    left: 5%;
+    transform: none;
+  }
+
+  /* Boutons Additionnels */
+  #color-picker {
+    bottom: 80px;
+    right: 20px;
+    width: 35px;
+    height: 35px;
+  }
+
+  #add-image-button {
+    bottom: 100px;
+    right: 20px;
+    font-size: 1em;
+    padding: 10px 15px;
+  }
+
+  .mindmap-toolbar {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .mindmap-toolbar button {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .exit-focus-button {
+    top: 10px;
+    right: 10px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+
+  /* Ajustements pour le bouton de toggle */
+  .toggle-controls {
+    padding: 10px 15px;
+    font-size: 1em;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 8px;
+  }
+}
+
+/* Media Query pour les très petits écrans (smartphones) */
+@media screen and (max-width: 480px) {
+  /* Ajustements généraux */
+  body {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  /* Logo */
+  .logo-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .logo-m {
+    font-size: 1.8em;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  /* Conteneur de la carte mentale */
+  .mindmap-container {
+    height: calc(100vh - 150px);
+    border-radius: 15px;
+  }
+
+  /* Barre d'outils */
+  .mindmap-toolbar {
+    top: 5px;
+    right: 5px;
+    gap: 5px;
+  }
+
+  .mindmap-toolbar button {
+    padding: 6px 10px;
+    font-size: 1em;
+  }
+
+  /* Contrôles */
+  .controls {
+    padding: 5px;
+  }
+
+  /* Zone de Saisie Markdown */
+  #markdown-input {
+    min-height: 80px;
+    max-height: 250px;
+    padding: 10px 12px;
+  }
+
+  /* Boutons d'Action */
+  .buttons-section button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  /* Sélecteurs de Couleurs */
+  .level-color-selector .default-color {
+    width: 25px;
+    height: 25px;
+  }
+
+  /* Bouton de Toggle des Contrôles */
+  .toggle-controls {
+    width: 40px;
+    height: 40px;
+    font-size: 1em;
+    padding: 8px 12px;
+  }
+
+  /* Bouton Exit Focus */
+  .exit-focus-button {
+    width: 35px;
+    height: 35px;
+    padding: 6px 10px;
+    font-size: 0.8em;
+  }
+
+  /* Bouton Ajouter Image */
+  #add-image-button {
+    width: 35px;
+    height: 35px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+
+  /* Sélecteur de Couleur */
+  #color-picker {
+    width: 35px;
+    height: 35px;
+  }
+
+  /* Popup de Couleurs */
+  .color-popup {
+    width: 90%;
+    left: 5%;
+  }
+}
+
+/* ====================================================
+    14. Mode Focus
+==================================================== */
+body.focus-mode .mindmap-container {
+}
+
+body.focus-mode .controls {
+  display: none;
+}
+
+body.focus-mode .mindmap-toolbar {
+  display: none;
+}
+
+body.focus-mode .exit-focus-button {
+  display: block;
+}
+
+body.focus-mode {
+}
+
+body.focus-mode .jmnode {
+  /* Ajustez les styles des nœuds en mode focus si nécessaire */
+}
+
+/* Styles pour les Boutons avec Icônes */
+button.toggle-controls i,
+button.exit-focus-button i,
+button.mindmap-toolbar i,
+button.button-group i {
+  font-size: 1.2em;
+  pointer-events: none;
+}
+
+/* Centrer les icônes verticalement et horizontalement */
+button.toggle-controls,
+button.exit-focus-button,
+button.mindmap-toolbar button,
+.button-group button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Exemple de taille pour le bouton toggle-controls */
+button.toggle-controls {
+  width: 50px;
+  height: 50px;
+}
+
+/* Exemple de taille pour le bouton exit-focus-button */
+button.exit-focus-button {
+  width: 40px;
+  height: 40px;
+}
+
+/* ====================================================
+    15. Popup d'Instructions
+==================================================== */
+
+/* Conteneur de la Popup */
+.instructions-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000; /* Au-dessus des autres éléments */
+}
+
+/* Contenu de la Popup */
+.instructions-popup .popup-content {
+  background-color: #fff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animation d'Apparition */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Bouton de Fermeture */
+.instructions-popup .close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5em;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.instructions-popup .close-button:hover {
+  color: #000;
+}
+
+/* Bouton Fermer */
+.instructions-popup .close-popup-button {
+  background-color: var(--color-button-background);
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 15px;
+  width: 100%;
+  font-size: 1em;
+}
+
+.instructions-popup .close-popup-button:hover {
+  background-color: var(--color-button-hover);
+}
+
+/* Bouton pour Ouvrir la Popup */
+.open-instructions-button {
+  position: fixed;
+  bottom: 90px; /* Positionné au-dessus des boutons existants */
+  right: 20px;
+  background-color: var(--color-button-background);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  font-size: 1em;
+  z-index: 2001; /* Au-dessus de la popup */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.open-instructions-button:hover {
+  background-color: var(--color-button-hover);
+  transform: scale(1.05);
+}
+
+/* Responsive Design pour la Popup */
+@media screen and (max-width: 480px) {
+  .instructions-popup .popup-content {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .instructions-popup pre {
+    font-size: 14px;
+  }
+
+  .open-instructions-button {
+    bottom: 80px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+}
