@@ -2,39 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Dynamic Mind Map with jsMind</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="MindlyMap is an intuitive mind mapping tool that helps you organize your thoughts and ideas visually. Create, edit, and share mind maps easily." />
+    <meta name="keywords" content="mind map, mind mapping, productivity, brainstorming, visualization" />
+    <meta name="author" content="MindlyMap Team" />
+    <meta property="og:title" content="MindlyMap - Visualize Your Thoughts" />
+    <meta property="og:description" content="MindlyMap is an intuitive mind mapping tool that helps you organize your thoughts and ideas visually. Create, edit, and share mind maps easily." />
+    <meta property="og:image" content="https://www.mindlymap.com/path/to/image.png" />
+    <meta property="og:url" content="https://www.mindlymap.com/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MindlyMap - Visualize Your Thoughts" />
+    <meta name="twitter:description" content="MindlyMap is an intuitive mind mapping tool that helps you organize your thoughts and ideas visually. Create, edit, and share mind maps easily." />
+    <meta name="twitter:image" content="https://www.mindlymap.com/path/to/image.png" />
+    <link rel="canonical" href="https://www.mindlymap.com/" />
+    <title>MindlyMap - Visualize Your Thoughts</title>
 
     <!-- Include Roboto Font -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
 
     <!-- Include jsMind Styles -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/jsmind/style/jsmind.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind/style/jsmind.css" />
 
     <!-- Include FontAwesome Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
 
     <!-- Include Custom CSS -->
     <link rel="stylesheet" href="styles.css" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "MindlyMap",
+      "description": "MindlyMap is an intuitive mind mapping tool that helps you organize your thoughts and ideas visually.",
+      "applicationCategory": "Productivity",
+      "operatingSystem": "Web",
+      "url": "https://www.mindlymap.com/",
+      "screenshot": "https://www.mindlymap.com/path/to/screenshot.png"
+    }
+    </script>
   </head>
   <body>
-    <div class="logo-container">
+    <h1 class="logo-container">
       <span class="logo-m">M</span>
       <span class="logo-text">indlyMap</span>
-    </div>
+    </h1>
 
     <!-- Mind Map Container -->
     <div id="jsmind_container" class="mindmap-container"></div>
@@ -43,53 +57,25 @@
     <div id="color-popup" class="color-popup" style="display: none"></div>
 
     <!-- Exit Focus Mode Button (Hidden by Default) -->
-    <button
-      id="exit-focus-button"
-      class="exit-focus-button"
-      title="Exit Focus Mode"
-      onclick="exitFocusMode()"
-      style="display: none"
-    >
+    <button id="exit-focus-button" class="exit-focus-button" title="Exit Focus Mode" onclick="exitFocusMode()" style="display: none">
       <i class="fas fa-compress"></i>
       <!-- Close Icon -->
     </button>
 
     <!-- Add Image to Node Button (Hidden by Default) -->
-    <button
-      id="add-image-button"
-      onclick="triggerNodeImageInput()"
-      title="Add Image to Selected Node"
-      style="display: none"
-    >
+    <button id="add-image-button" onclick="triggerNodeImageInput()" title="Add Image to Selected Node" style="display: none">
       <i class="fas fa-image"></i>
       <!-- Image Icon -->
     </button>
 
     <!-- Color Picker for Individual Nodes -->
-    <input
-      type="color"
-      id="color-picker"
-      onchange="changeNodeColor()"
-      style="display: none"
-    />
+    <input type="color" id="color-picker" onchange="changeNodeColor()" style="display: none" />
 
     <!-- File Input to Import Mind Map (Hidden) -->
-    <input
-      type="file"
-      id="file-input"
-      accept=".json"
-      onchange="loadMindMap(event)"
-      style="display: none"
-    />
+    <input type="file" id="file-input" accept=".json" onchange="loadMindMap(event)" style="display: none" />
 
     <!-- File Input to Select Image for a Node (Hidden) -->
-    <input
-      type="file"
-      id="node-image-input"
-      accept="image/*"
-      onchange="addNodeImage(event)"
-      style="display: none"
-    />
+    <input type="file" id="node-image-input" accept="image/*" onchange="addNodeImage(event)" style="display: none" />
 
     <!-- Mind Map Toolbar -->
     <div class="mindmap-toolbar">
@@ -97,20 +83,11 @@
         <i class="fas fa-search-plus"></i>
         <!-- Zoom In Icon -->
       </button>
-      <button
-        onclick="zoomOut()"
-        title="Zoom Out"
-        aria-label="Zoom Out"
-      >
+      <button onclick="zoomOut()" title="Zoom Out" aria-label="Zoom Out">
         <i class="fas fa-search-minus"></i>
         <!-- Zoom Out Icon -->
       </button>
-      <button
-        onclick="toggleFocusMode()"
-        title="Focus Mode"
-        aria-label="Activate Focus Mode"
-        class="toggle-focus"
-      >
+      <button onclick="toggleFocusMode()" title="Focus Mode" aria-label="Activate Focus Mode" class="toggle-focus">
         <i class="fas fa-expand"></i>
         <!-- Initial Expansion Icon -->
       </button>
@@ -120,7 +97,6 @@
       <button onclick="exportMindMap()" title="Export as Image" aria-label="Export as Image">
         <i class="fas fa-file-image"></i> <!-- Export Image Icon -->
       </button>
-      <!-- Button to Change Orientation -->
       <!-- Button to Open Instructions -->
       <button onclick="openInstructionsPopup(true)" title="Show Instructions" aria-label="Show Instructions">
         <i class="fas fa-info-circle"></i>
@@ -132,10 +108,7 @@
     <div class="controls">
       <!-- Markdown Input Section -->
       <div class="control-section markdown-section">
-        <textarea
-          id="markdown-input"
-          placeholder="Enter your Markdown here..."
-        >
+        <textarea id="markdown-input" placeholder="Enter your Markdown here...">
 # Mind Map Root
 - Branch 1
   - Leaf 1.1
@@ -148,31 +121,23 @@
 
       <!-- Action Buttons Section -->
       <div class="control-section buttons-section">
-        <button
-          onclick="renderMindMap()"
-          title="Generate"
-          aria-label="Generate"
-        >
+        <button onclick="renderMindMap()" title="Generate" aria-label="Generate">
           <i class="fas fa-sync-alt"></i> Generate
         </button>
-        <button
-          onclick="triggerFileInput()"
-          title="Import"
-          aria-label="Import"
-        >
+        <button onclick="triggerFileInput()" title="Import" aria-label="Import">
           <i class="fas fa-upload"></i> Import
         </button>
       </div>
 
       <!-- Color Selectors Section -->
       <div class="control-section colors-section">
-        <h3>Select Colors by Level</h3>
+        <h3 id="title-select-color">Select Colors by Level</h3>
         <div id="level-colors-container" class="level-colors-container"></div>
       </div>
     </div>
 
     <!-- Instructions Popup -->
-    <div id="instructions-popup" class="instructions-popup" role="dialog" aria-modal="true" aria-labelledby="instructions-title">
+    <div id="instructions-popup" class="instructions-popup" role="dialog" aria-modal="true" aria-labelledby="instructions-title" style="display: none;">
       <div class="popup-content">
         <span class="close-button" onclick="closeInstructionsPopup()" aria-label="Close">&times;</span>
         <h2 id="instructions-title">Format Instructions</h2>
@@ -201,6 +166,15 @@
       <!-- Initial Icon to Hide Controls -->
     </button>
 
+    <!-- Cookie Consent Popup -->
+    <div id="cookieConsentPopup" style="display: none;">
+      This site uses cookies to provide you with a better experience. 
+      <div>
+        <button id="acceptButton">Accept</button>
+        <button id="declineButton">Decline</button>
+      </div>
+    </div>
+
     <!-- Include jsMind Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/jsmind/js/jsmind.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsmind/js/jsmind.draggable.js"></script>
@@ -208,5 +182,14 @@
 
     <!-- Include Custom JavaScript -->
     <script src="script.js"></script>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-XXXXX-Y');
+    </script>
   </body>
 </html>

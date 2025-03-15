@@ -108,6 +108,8 @@ function generateLevelColorPickers(maxLevel) {
   // Option for root
   const rootSelectorDiv = document.createElement('div');
   rootSelectorDiv.className = 'level-color-selector root-selector';
+  const titleSelectColor = document.getElementById('title-select-color');
+  titleSelectColor.style.display = 'block';
 
   const rootLabel = document.createElement('label');
   rootLabel.textContent = `Root`;
@@ -128,6 +130,7 @@ function generateLevelColorPickers(maxLevel) {
   rootSelectorDiv.appendChild(rootLabel);
   rootSelectorDiv.appendChild(rootColorDiv);
   levelColorsContainer.appendChild(rootSelectorDiv);
+
 
   // For levels 1 and above
   for (let level = 1; level <= maxLevel; level++) {
@@ -579,10 +582,6 @@ function toggleControls() {
 
 // Function to open the instructions popup
 function openInstructionsPopup(clicked = false) {
-  const hidePopup = localStorage.getItem('hideInstructionsPopup');
-  if (!clicked && clickedhidePopup === 'true') {
-    return; // Do not open the popup if the user has chosen not to display it anymore
-  }
   const popup = document.getElementById('instructions-popup');
   popup.style.display = 'flex';
 }
@@ -602,3 +601,43 @@ function dontShowAgain() {
     localStorage.removeItem('hideInstructionsPopup');
   }
 }
+
+// Afficher la popup si l'utilisateur n'a pas déjà donné son consentement
+document.addEventListener('DOMContentLoaded', function() {
+  if (!localStorage.getItem('cookiesAccepted')) {
+    document.getElementById('cookieConsentPopup').style.display = 'flex';
+  }
+
+  // Gestion des boutons de consentement
+  document.getElementById('acceptButton').addEventListener('click', function() {
+    localStorage.setItem('cookiesAccepted', 'true');
+    document.getElementById('cookieConsentPopup').style.display = 'none';
+    loadGoogleAnalytics(); // Charge Google Analytics après consentement
+  });
+
+  document.getElementById('declineButton').addEventListener('click', function() {
+    localStorage.setItem('cookiesAccepted', 'false');
+    document.getElementById('cookieConsentPopup').style.display = 'none';
+  });
+});
+
+// Fonction pour charger Google Analytics
+function loadGoogleAnalytics() {
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtag/js?id='+i;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','G-GQ91P0G0ZR');
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GQ91P0G0ZR', { 'anonymize_ip': true }); // Utilise l'ID de mesure et anonymise l'IP
+}
+
+// Charger Google Analytics automatiquement si l'utilisateur a déjà donné son consentement
+if (localStorage.getItem('cookiesAccepted') === 'true') {
+  loadGoogleAnalytics();
+}
+
